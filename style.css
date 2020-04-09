@@ -1,0 +1,160 @@
+body {
+  background: black;
+  color: #DDDDDD;
+  font-family: courier new;
+  text-align: center;
+}
+
+h1 {
+  text-align: center;
+  font-size: 18pt;
+  font-weight: bold;
+  padding: 8px 0px;
+  margin: 0px 0px px 0px;
+}
+
+#grid {
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 20px;
+}
+
+#grid TR TD{
+  border:1px solid white;
+  background: #aaaaaa;
+  width: 36px;
+  height: 36px;
+}
+
+#grid TR TD.empty {
+    background: gray;
+}
+#grid TR TD.tank {
+	background-image: url('image/tank.png');
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-size: 100%;
+	overflow:hidden;
+}
+
+#grid img {
+    max-width:100%;
+	max-height: 100%;
+}
+
+#grid TR TD.missile {
+	text-align: center;
+	vertical-align: middle;
+	overflow:hidden;
+}
+#grid TR TD.explosion {
+	background-image: url('image/shield.png');
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-size: 100%;
+	overflow:hidden;
+}
+
+#scoreId, #levelId, #hiscoreId {
+	display:inline;
+}
+
+#arrow { 
+  margin: 0px 0px;
+}
+
+#arrow button {
+  width: 50px;
+  height: 50px;
+  border: 0;
+  background-size: 100%;
+  cursor: pointer;
+}
+
+#control { margin: 20px 20px 20px 20px;}
+
+#control button {
+  width: 80px;
+  height: 50px;
+  border: 0;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+#reset button:hover {
+  background: #F00000;
+}
+
+#reset button {
+  width: 120px;
+  height: 40px;
+  border: 0;
+  cursor: pointer;  
+}
+
+#msg {
+  position: fixed;
+  z-index: 1;
+  color:red;
+  font-weight: bold;
+  background-color: white;
+  font-size: 18pt;
+  font-weight: bold;
+  top: 20%;
+  left: 50%;
+  margin-top: -50px;
+  margin-left: -100px;
+}
+
+#cred {
+  position: fixed;
+  z-index: 1;
+  color:blue;
+  font-weight: bold;
+  background-color: white;
+  font-size: 18pt;
+  font-weight: bold;
+  top: 120px;
+  left: 100px;
+  transform: rotate(-45deg);
+}
+
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 2; /* Sit on top */
+  padding-top: 50px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: gray; /* Fallback color */
+}
+
+.modal-content {
+  background-color: #222;
+  color: white;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 600px;
+}
+
+.close {
+  color: white;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #888;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.tg-modal td {
+	padding:5px 15px;
+}
