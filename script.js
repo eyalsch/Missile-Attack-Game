@@ -4,6 +4,18 @@ const TANK = 1;
 const MISSILE = 2;
 const EXPLOSION = 3;
 
+const upleft = 36;
+const up = 38;
+const upright = 33;
+const left = 37;
+const staykey = 12;
+const right = 39;
+const downleft = 35;
+const down = 40;
+const downright = 34;
+const insertkey = 45;
+const delkey = 46;
+
 var grid = document.getElementById("grid");
 grid.onclick = function() {document.getElementById("HelpModal").style.display = "block";}
 var span = document.getElementsByClassName("close")[0];
@@ -222,7 +234,6 @@ function EndOfGame() {
 	DisplayBoard();
 	document.getElementById("arrow").style.pointerEvents = "none";
 	document.getElementById("control").style.pointerEvents = "none";
-	//grid.innerHTML="";
 	if (Score > HighestScore) {
 		msg.innerHTML="Game Over<br>Final Score: " + Score + "<br>NEW HIGH SCORE!!!";
 		SaveHighestScore();
@@ -409,3 +420,53 @@ function TablePrint(t) {
 	   	console.log(line);
 	}
 }
+
+document.onkeydown = function(event) {
+						console.log("onkeydown function: " + event.keyCode); 
+						switch (event.keyCode) {
+							case upleft:
+							case 103:
+								move(1);
+								break;
+							case up:
+							case 104:
+								move(2);
+								break;
+							case upright:
+							case 105:
+								move(3);
+								break;
+							case left:
+							case 100:
+								move(4);
+								break;
+							case staykey:
+							case 101:
+								stay();
+								break;
+							case right:
+							case 102:
+								move(6);
+								break;
+							case downleft:
+							case 97:
+								move(7);
+								break;
+							case down:
+							case 98:
+								move(8);
+								break;
+							case downright:
+							case 99:
+								move(9);
+								break;
+							case insertkey:
+							case 96:
+								blow();
+								break;
+							case delkey:
+							case 110:
+								jump();
+								break;
+						}
+					};
