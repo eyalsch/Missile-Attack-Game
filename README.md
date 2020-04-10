@@ -7,4 +7,4 @@ Base on a game name "Dalek" by Heiko Selber
 # Todo
 
  - Responsive
- - keyboard input
+ - ~~keyboard input~~
