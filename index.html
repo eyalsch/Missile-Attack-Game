@@ -1,99 +1,110 @@
 <!-- Base on a game name "Dalek" by Heiko Selber -->
+<!-- Written by: Eyal Schachner -->
 <html>
-<title>Missile Attack</title>
-<head>
-<link rel="stylesheet" type="text/css" href="style.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>Missile Attack</title>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 
 <body>
-	<audio id="playBlow" src="sound/Blow.mp3"></audio>
-	<audio id="playButton" src="sound/Button.mp3"></audio>
-	<audio id="playJump" src="sound/Jump.mp3"></audio>
-	<audio id="playLevelEnd" src="sound/LevelEnd.mp3"></audio>
-	<audio id="playEndOfGame" src="sound/EndOfGame.mp3"></audio>
+    <audio id="playBlow" src="sound/Blow.mp3"></audio>
+    <audio id="playButton" src="sound/Button.mp3"></audio>
+    <audio id="playJump" src="sound/Jump.mp3"></audio>
+    <audio id="playLevelEnd" src="sound/LevelEnd.mp3"></audio>
+    <audio id="playEndOfGame" src="sound/EndOfGame.mp3"></audio>
 
-	<div id="cred">Eyal Schachner</div>
-	<H1><div>
-		Score: <div id=scoreId></div>
-		Level: <div id=levelId></div>
-		High Score: <div id=hiscoreId></div>
-	</div></H1>
-	
-	<table id=grid>	</table>
+    <div id=scoreline>
+        <div>
+            Score: <div id=scoreId></div>
+            Level: <div id=levelId></div>
+            High Score: <div id=hiscoreId></div>
+        </div>
+    </div>
 
-	<div id=arrow>
-		<button style="background: url('image/arrow.png'); transform: rotate(-45deg); background-size: 100%;" onclick="move(1)"></button>
-		<button style="background: url('image/arrow.png'); background-size: 100%;" onclick="move(2)"></button>
-		<button style="background: url('image/arrow.png'); transform: rotate(45deg); background-size: 100%;" onclick="move(3)"></button><br>
-		<button style="background: url('image/arrow.png'); transform: rotate(-90deg); background-size: 100%;" onclick="move(4)"></button>
-		<button style="background: url('image/stay.png'); background-size: 100%;" onclick="stay()"></button>  
-		<button style="background: url('image/arrow.png'); transform: rotate(90deg); background-size: 100%;" onclick="move(6)"></button><br>
-		<button style="background: url('image/arrow.png'); transform: rotate(-135deg); background-size: 100%;" onclick="move(7)"></button>
-		<button style="background: url('image/arrow.png'); transform: rotate(180deg); background-size: 100%;" onclick="move(8)"></button>
-		<button style="background: url('image/arrow.png'); transform: rotate(135deg); background-size: 100%;" onclick="move(9)"></button><br>
-	</div>
+    <div id=msg></div>
+    <table id=grid></table>
+	<div id=ccc>
 	<div id=control>
-		<button style="background:red;" onclick="blow();">Blow</button>
-		<button style="background:green;" onclick="jump();">Jump</button>
+		<div id=blow>
+			<button onclick="blow();">Blow</button>
+		</div>
+		<div id=arrow>
+			<button style="background: url('image/arrow.png'); transform: rotate(-45deg); background-size: 100%;" onclick="move(1)"></button>
+			<button style="background: url('image/arrow.png'); background-size: 100%;" onclick="move(2)"></button>
+			<button style="background: url('image/arrow.png'); transform: rotate(45deg); background-size: 100%;" onclick="move(3)"></button><br>
+			<button style="background: url('image/arrow.png'); transform: rotate(-90deg); background-size: 100%;" onclick="move(4)"></button>
+			<button style="background: url('image/stay.png'); background-size: 100%;" onclick="stay()"></button>
+			<button style="background: url('image/arrow.png'); transform: rotate(90deg); background-size: 100%;" onclick="move(6)"></button><br>
+			<button style="background: url('image/arrow.png'); transform: rotate(-135deg); background-size: 100%;" onclick="move(7)"></button>
+			<button style="background: url('image/arrow.png'); transform: rotate(180deg); background-size: 100%;" onclick="move(8)"></button>
+			<button style="background: url('image/arrow.png'); transform: rotate(135deg); background-size: 100%; overflow: hidden;" onclick="move(9)"></button><br>
+		</div>
+		<div id=jump>
+			<button onclick="jump();">Jump</button>
+		</div>
+	</div>
 	</div>
 
-	<div id=reset>
-		<button onclick="StartGame();">Reset Game</button>
-	</div>
-	
-	<br><br>
-	<div id=msg></div>
+    <div id=reset>
+        <button onclick="StartGame();">Reset Game</button>
+    </div>
 
-<!-- The Modal help-->
-<div id="HelpModal" class="modal">
+    <!-- The Modal help-->
+    <div id="HelpModal" class="modal">
 
-  <!-- Modal help content -->
-  <div class="modal-content">
-    <span class="close">&times;</span>
-    <p style="margin:0px 0px; font-weight: bold;">Drive away from the missiles.<br>
-	Whenever you make a move. the missiles move, too.<br>
-	If a missile hits you, the game is over.<br><br>
-	If two missiles run into each other. they explode<br>
-	and turn into a shield.<br>
-	A missile is destroyed if it runs into a shield.<br>
-	A level is completed when all missiles were destroyed.</p>
-	<table class="tg-modal">
-	  <tr>
-		<td style="text-align: center; vertical-align: middle; overflow:hidden;"><img src="image/tank.png" width="90" height="90"></td>
-		<td>Your Tank</td>
-	  </tr>
-	  <tr>
-		<td style="text-align: center; vertical-align: middle; overflow:hidden;"><img style="transform: rotate(90deg);" src="image/missile.png" width="60" height="90"></td>
-		<td>Missile</td>
-	  </tr>
-	  <tr>
-		<td style="text-align: center; vertical-align: middle; overflow:hidden;"><img src="image/shield.png" width="108" height="84"></td>
-		<td>Shield</td>
-	  </tr>
-	  <tr>
-		<td style="text-align: center; vertical-align: middle; overflow:hidden;"><img src="image/arrows.png" width="110" height="100"></td>
-		<td>Use the arrow buttons to movr the tank</td>
-	  </tr>
-	  <tr>
-		<td><p style="background-color: green; margin:0px 0px; width: 80; height: 50px; display: flex; justify-content: center;  align-items: center;">Jump</p></td>
-		<td>Use the jump button to jump to a random<br>location</td>
-	  </tr>
-	  <tr>
-		<td><p style="background-color: red; width: 80; height: 50px; display: flex; justify-content: center;  align-items: center;">Blow</p></td>
-		<td>Use the blow (ince pre level) to explode<br>all the missiles around you</td>
-	  </tr>
-	</table>
-	<p style="margin:8px 0px; font-weight: bold;">
-	You receive one point for every missile destroyed.<br>
-	The number of missiles increase each new level.
-	</p>
-	<div style="color:yellow; font-weight: bold; text-align:center; padding: 8px 0px 0px 0px;">Enjoy the game!</div>
-  </div>
+        <!-- Modal help content -->
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p style="margin:0px 0px; font-weight: bold;">Drive away from the missiles.<br>
+                Whenever you make a move the missiles move.<br>
+                If a missile hits you the game is over.<br><br>
+                If two missiles run into each other they explode<br>
+                and turn into a shield.<br>
+                A missile is destroyed if it runs into a shield.<br>
+                A level is completed when all missiles were destroyed.</p>
+            <table class="tg-modal">
+                <tr>
+                    <td class="image"><img src="image/tank.png" width="90" height="80"></td>
+                    <td class="caption">Your Tank</td>
+                </tr>
+                <tr>
+                    <td class="image"><img style="transform: rotate(90deg);" src="image/missile.png" width="60" height="90"></td>
+                    <td class="caption">Missile</td>
+                </tr>
+                <tr>
+                    <td class="image"><img src="image/shield.png" width="108" height="84"></td>
+                    <td class="caption">Shield</td>
+                </tr>
+                <tr>
+                    <td class="image"><img src="image/arrows.png" width="110" height="100"></td>
+                    <td class="caption">Use the arrow buttons to move the tank</td>
+                </tr>
+                <tr>
+                    <td>
+                        <p class="btn" style="background-color: green; color: white;">Jump</p>
+                    </td>
+                    <td class="caption">Use the jump button to jump to a random location</td>
+                </tr>
+                <tr>
+                    <td>
+                        <p class="btn" style="background-color: red; color: white;">Blow</p>
+                    </td>
+                    <td class="caption">Use the blow (once pre level) to explode all the missiles around you</td>
+                </tr>
+            </table>
+            <p style="margin:8px 0px; text-align: center;">
+                You receive 1 point for every missile destroyed.<br>
+                The number of missiles increase each new level.
+            </p>
+            <div style="color:yellow; font-weight: bold; text-align:center; padding: 8px 0px 0px 0px;">Enjoy the game!</div>
+        </div>
 
-</div>
-	
-	<script type="text/javascript" src="script.js"></script>
+    </div>
+
+    <script type="text/javascript" src="script.js"></script>
 </body>
 
 </html>
