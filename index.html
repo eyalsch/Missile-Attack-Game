@@ -14,7 +14,7 @@
     <audio id="playButton" src="sound/Button.mp3"></audio>
     <audio id="playJump" src="sound/Jump.mp3"></audio>
     <audio id="playLevelEnd" src="sound/LevelEnd.mp3"></audio>
-    <audio id="playEndOfGame" src="sound/EndOfGame.mp3"></audio>
+    <audio id="playEndOfGame" src="sound/EndOfGame.mp3" autoplay></audio>
 
     <div id=scoreline>
         <div>
@@ -30,6 +30,10 @@
 	<div id=control>
 		<div id=blow>
 			<button onclick="blow();">Blow</button>
+			<br>
+			<div id=reset>
+				<button onclick="StartGame();">Reset Game</button>
+			</div>
 		</div>
 		<div id=arrow>
 			<button style="background: url('image/arrow.png'); transform: rotate(-45deg); background-size: 100%;" onclick="move(1)"></button>
@@ -47,10 +51,6 @@
 		</div>
 	</div>
 	</div>
-
-    <div id=reset>
-        <button onclick="StartGame();">Reset Game</button>
-    </div>
 
     <!-- The Modal help-->
     <div id="HelpModal" class="modal">
