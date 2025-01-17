@@ -5,18 +5,6 @@ const TANK = 1;
 const MISSILE = 2;
 const EXPLOSION = 3;
 
-const upleft = 36;
-const up = 38;
-const upright = 33;
-const left = 37;
-const staykey = 12;
-const right = 39;
-const downleft = 35;
-const down = 40;
-const downright = 34;
-const insertkey = 45;
-const delkey = 46;
-
 var grid = document.getElementById("grid");
 grid.onclick = function() {
     document.getElementById("HelpModal").style.display = "block";
@@ -50,18 +38,9 @@ var HighestScore;
 var BlowActive = true; // blow pressed
 var Score = 0;
 
-var Board = new Array(ROWS);
-for (var i = 0; i < Board.length; i++) {
-    Board[i] = new Array(COLS);
-}
-var PrevBoard = new Array(ROWS);
-for (var i = 0; i < PrevBoard.length; i++) {
-    PrevBoard[i] = new Array(COLS);
-}
-var Tcopy = new Array(ROWS);
-for (var i = 0; i < Tcopy.length; i++) {
-    Tcopy[i] = new Array(COLS);
-}
+var Board = Array.from({ length: ROWS }, () => Array(COLS).fill(0));
+var PrevBoard = Array.from({ length: ROWS }, () => Array(COLS).fill(0));
+var Tcopy = Array.from({ length: ROWS }, () => Array(COLS).fill(0));
 
 StartGame();
 
@@ -256,93 +235,72 @@ function EndOfGame() {
 
 function move(key) {
     console.log("move function: " + key);
-    var ok = false;
+
+    // Play movement sound
     document.getElementById("playButton").play();
-    switch (key) {
-        case 1: // Up Left
-            if ((tankPlace.x > 0) && (tankPlace.y > 0)) {
-                Board[tankPlace.x][tankPlace.y] = EMPTY;
-                tankPlace.x = tankPlace.x - 1;
-                tankPlace.y = tankPlace.y - 1;
-                ok = true;
-            }
-            break;
-        case 2: // Up
-            if (tankPlace.x > 0) {
-                Board[tankPlace.x][tankPlace.y] = EMPTY;
-                tankPlace.x = tankPlace.x - 1;
-                ok = true;
-            }
-            break;
-        case 3: // Up Right
-            if ((tankPlace.x > 0) && (tankPlace.y < COLS - 1)) {
-                Board[tankPlace.x][tankPlace.y] = EMPTY;
-                tankPlace.x = tankPlace.x - 1;
-                tankPlace.y = tankPlace.y + 1;
-                ok = true;
-            }
-            break;
-        case 4: // Left
-            if (tankPlace.y > 0) {
-                Board[tankPlace.x][tankPlace.y] = EMPTY;
-                tankPlace.y = tankPlace.y - 1;
-                ok = true;
-            }
-            break;
-        case 6: // Right
-            if (tankPlace.y < COLS - 1) {
-                Board[tankPlace.x][tankPlace.y] = EMPTY;
-                tankPlace.y = tankPlace.y + 1;
-                ok = true;
-            }
-            break;
-        case 7: // Down Left
-            if ((tankPlace.x < ROWS - 1) && (tankPlace.y > 0)) {
-                Board[tankPlace.x][tankPlace.y] = EMPTY;
-                tankPlace.x = tankPlace.x + 1;
-                tankPlace.y = tankPlace.y - 1;
-                ok = true;
-            }
-            break;
-        case 8: // Down
-            if (tankPlace.x < ROWS - 1) {
-                Board[tankPlace.x][tankPlace.y] = EMPTY;
-                tankPlace.x = tankPlace.x + 1;
-                ok = true;
-            }
-            break;
-        case 9: // Down Right
-            if ((tankPlace.x < ROWS - 1) && (tankPlace.y < COLS - 1)) {
-                Board[tankPlace.x][tankPlace.y] = EMPTY;
-                tankPlace.x = tankPlace.x + 1;
-                tankPlace.y = tankPlace.y + 1;
-                ok = true;
-            }
-            break;
+
+    // Define direction offsets for movement
+    const directionOffsets = {
+        1: [-1, -1], // Up Left
+        2: [-1, 0],  // Up
+        3: [-1, 1],  // Up Right
+        4: [0, -1],  // Left
+        6: [0, 1],   // Right
+        7: [1, -1],  // Down Left
+        8: [1, 0],   // Down
+        9: [1, 1],   // Down Right
+    };
+
+    // Helper function to check boundaries
+    function isWithinBounds(x, y) {
+        return x >= 0 && x < ROWS && y >= 0 && y < COLS;
     }
-    if (ok) {
-        if (Board[tankPlace.x][tankPlace.y] != EMPTY) {
-            Alive = false;
-        }
-        Board[tankPlace.x][tankPlace.y] = TANK;
-        MoveMissiles();
-        if (Alive == true) {
-            if (NumMissileLeft == 0) {
-                StartLevel();
+
+    // Process movement if the key corresponds to a valid direction
+    if (directionOffsets[key]) {
+        const [dx, dy] = directionOffsets[key];
+        const newX = tankPlace.x + dx;
+        const newY = tankPlace.y + dy;
+
+        // Check if the new position is within bounds
+        if (isWithinBounds(newX, newY)) {
+            // Update the board and tank position
+            Board[tankPlace.x][tankPlace.y] = EMPTY;
+            tankPlace.x = newX;
+            tankPlace.y = newY;
+
+            // Check for collision
+            if (Board[tankPlace.x][tankPlace.y] !== EMPTY) {
+                Alive = false;
+            }
+
+            // Update the board with the new tank position
+            Board[tankPlace.x][tankPlace.y] = TANK;
+
+            // Handle missiles and game state
+            MoveMissiles();
+            if (Alive) {
+                if (NumMissileLeft === 0) {
+                    StartLevel();
+                } else {
+                    DisplayBoard();
+                }
             } else {
-                DisplayBoard();
+                EndOfGame();
             }
         } else {
-            EndOfGame();
+            console.log("Move out of bounds: " + newX + ", " + newY);
         }
-    } //ok
+    } else {
+        console.log("Invalid key: " + key);
+    }
 }
 
 function stay() {
     console.log("stay function");
     document.getElementById("playButton").play();
     MoveMissiles();
-    if (Alive == true) {
+    if (Alive) {
         if (NumMissileLeft == 0) {
             StartLevel();
         } else {
@@ -364,7 +322,7 @@ function jump() {
 	console.log("jump to: " + tankPlace.x + "," + tankPlace.y);
     Board[tankPlace.x][tankPlace.y] = TANK;
     MoveMissiles();
-    if (Alive == true) {
+    if (Alive) {
         if (NumMissileLeft == 0) {
             StartLevel();
         } else {
@@ -432,50 +390,39 @@ function unbindKey() {
 
 function bindKey() {
 	document.onkeydown = function(event) {
-		console.log("onkeydown function: " + event.keyCode);
-		switch (event.keyCode) {
-			case upleft:
-			case 103:
+		console.log("onkeydown function: " + event.key);
+		switch (event.key) {
+			case '7': case 'Home':
 				move(1);
 				break;
-			case up:
-			case 104:
+			case '8': case 'ArrowUp':
 				move(2);
 				break;
-			case upright:
-			case 105:
+			case '9': case 'PageUp':
 				move(3);
 				break;
-			case left:
-			case 100:
+			case '4': case 'ArrowLeft':
 				move(4);
 				break;
-			case staykey:
-			case 101:
+			case '5': case 'Clear':
 				stay();
 				break;
-			case right:
-			case 102:
+			case '6': case 'ArrowRight':
 				move(6);
 				break;
-			case downleft:
-			case 97:
+			case '1': case 'End':
 				move(7);
 				break;
-			case down:
-			case 98:
+			case '2': case 'ArrowDown':
 				move(8);
 				break;
-			case downright:
-			case 99:
+			case '3': case 'PageDown':
 				move(9);
 				break;
-			case insertkey:
-			case 96:
+			case '0': case 'Insert':
 				blow();
 				break;
-			case delkey:
-			case 110:
+			case '.': case 'Delete':
 				jump();
 				break;
 		}
